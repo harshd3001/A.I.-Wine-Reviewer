@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wine Reviewer</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script>
+        fetch("https://api.pexels.com/v1/search?query={{country}}",{
+          headers: {
+            Authorization: "lbSbb5ZWrlc3gnxFd7s716feAdeZx7Q7CYt1ZSXEv1owDG5RQlaRT2XM"
+          }
+        })
+           .then(resp => {
+             return resp.json()
+           })
+           .then(data => {
+             photo_url=data.photos[0].src.portrait
+             image=document.querySelector("#image")
+             image.src=photo_url
+             image.style.display="block"
+           })
+           fetch("https://api.pexels.com/v1/search?query=wine bottle",{
+          headers: {
+            Authorization: "lbSbb5ZWrlc3gnxFd7s716feAdeZx7Q7CYt1ZSXEv1owDG5RQlaRT2XM"
+          }
+        })
+           .then(resp => {
+             return resp.json()
+           })
+           .then(data => {
+             photo_url=data.photos[Math.floor(Math.random()*10)].src.portrait
+             image=document.querySelector("#image2")
+             image.src=photo_url
+             image.style.display="block"
+           })
+           fetch("https://en.wikipedia.org/w/rest.php/v1/search/page?q={{variety}}&limit=1")
+           .then(resp => {
+             return resp.json()
+           })
+           .then(data => {
+            document.querySelector("#desc").innerText= "{{variety}}:- "+data.pages[0].description
+           })
+
+           $(document).ready(function(){
+  
+  $(".winner-wrap").hover(
+    function () {
+        $('.team-wrap').removeClass('inactive').addClass('active');
+    },
+    function () {
+        $('.team-wrap').removeClass('active').addClass('inactive');
+    }
+);
+  
+  });
+            </script>
+</head>
+<body>
+    <div class="card-frame">
+	<div class="card card1">
+        <img id="image" src="" alt="">
+		<p> This wine comes from {{country}}, {{province}}</p>
+	</div>
+	<div class="card middle-card">
+		<section class="random-bg">
+            <div class="winner-wrap">
+              <div class="border"></div>
+              <div class="medal-box"><i class="fas fa-medal"></i></div>
+              <h1>Your wine got rating of </h1>
+              <h2></h2>
+              <div class="winner-ribbon">{{points}}</div>
+              <div class="right-ribbon"></div>
+              <div class="left-ribbon"></div>
+            </div>
+          <div class="team-wrap">
+            <div class="member-pic"><img src="https://img.freepik.com/free-vector/gold-star_23-2147513729.jpg?1&w=740&t=st=1679427068~exp=1679427668~hmac=a8866ba8ffda1338eaa6586cfd2528f519928516b631186089e8ed6c59808cae"/></div>
+            <div class="member-pic"><img src="https://img.freepik.com/free-vector/gold-star_23-2147513729.jpg?1&w=740&t=st=1679427068~exp=1679427668~hmac=a8866ba8ffda1338eaa6586cfd2528f519928516b631186089e8ed6c59808cae"/></div>
+            <div class="member-pic"><img src="https://img.freepik.com/free-vector/gold-star_23-2147513729.jpg?1&w=740&t=st=1679427068~exp=1679427668~hmac=a8866ba8ffda1338eaa6586cfd2528f519928516b631186089e8ed6c59808cae"/></div>
+            <div class="member-pic"><img src="https://img.freepik.com/free-vector/gold-star_23-2147513729.jpg?1&w=740&t=st=1679427068~exp=1679427668~hmac=a8866ba8ffda1338eaa6586cfd2528f519928516b631186089e8ed6c59808cae"/></div>
+            <div class="member-pic"><img src="https://img.freepik.com/free-vector/gold-star_23-2147513729.jpg?1&w=740&t=st=1679427068~exp=1679427668~hmac=a8866ba8ffda1338eaa6586cfd2528f519928516b631186089e8ed6c59808cae"/></div>
+          </div>
+          </section>
+          <p> “{{quote}}”</p>
+          <button id="go-back" type="button" onclick="window.location.href='/';">Try Again</button> 
+	</div>
+	<div class="card">
+		<img id="image2" src="" alt="">
+		<p id="desc"></p>
+	</div>
+</div>
+
+</body>
+</html>

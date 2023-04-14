@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wine Reviewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <style>
+      html{
+        background: url("static/css/image.jpg");
+        background-size: cover;
+      }
+      h1{
+        color: whitesmoke;
+      }
+      body{
+        background-color: transparent;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      label{
+        color: white;
+      }
+      datalist {
+        position: absolute;
+        max-height: 20em;
+        border: 0 none;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      datalist option {
+        font-size: 0.8em;
+        padding: 0.3em 1em;
+        background-color: #ccc;
+        cursor: pointer;
+      }
+
+      /* option active styles */
+      datalist option:hover,
+      datalist option:focus {
+        color: #fff;
+        background-color: #036;
+        outline: 0 none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center my-5">A.I. Wine Reviewer</h1>
+      <form action="/results" method="POST" onsubmit="return validate();">
+        <div class="mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input list="country-list" class="form-control" id="country" name="country" placeholder="Select country...">
+          <datalist id="country-list">
+            {% for i in countries %}
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}    
+          </datalist>
+        </div>
+        <div class="mb-3">
+          <label for="province" class="form-label">Province</label>
+          <input list="province-list" class="form-control" id="province" name="province" placeholder="Select province...">
+          <datalist id="province-list">
+            {% for i in provinces %}
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}  
+          </datalist>
+        </div>
+        <div class="mb-3">
+          <label for="wine-type" class="form-label">Wine Type</label>
+          <input list="wine-type-list" class="form-control" id="wine-type" name="wine-type" placeholder="Select wine type...">
+          <datalist id="wine-type-list">
+            {% for i in varities %}
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}  
+          </datalist>
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input type="number" list="price-list" class="form-control" id="price" name="price" placeholder="Enter Price">
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <script>
+      countries=[];
+      provinces=[];
+      varities=[];
+      document.querySelector('#country-list').querySelectorAll('option').forEach(dat=> countries.push(dat.innerText));
+      document.querySelector('#province-list').querySelectorAll('option').forEach(dat=> provinces.push(dat.innerText));
+      document.querySelector('#wine-type-list').querySelectorAll('option').forEach(dat=> varities.push(dat.innerText));
+      $(document).ready(function() {
+        // Initialize the custom file input plugin
+        bsCustomFileInput.init();
+        
+        $(document).on('click', function(event) {
+    // check if the clicked element is not within the datalist or input field
+    if (!$(event.target).closest('datalist').length && !$(event.target).is('input')) {
+      // hide all datalists
+      $('datalist').hide();
+    }
+  });
+
+  // handle click on input field
+  $('input').on('click', function() {
+    // show the corresponding datalist
+    $(this).siblings('datalist').show();
+  });  
+      });
+
+    function validate(){
+      country=document.querySelector('#country').value
+      province=document.querySelector('#province').value
+      price=document.querySelector('#price').value
+      variety=document.querySelector('#wine-type').value
+      desc=document.querySelector('#description').value
+      if(country.length>1 && province.length>1 && variety.length>1 && desc.length>1 && price.length>1  && countries.includes(country) && provinces.includes(province) && varities.includes(variety)){
+        return true
+      }else{
+        alert('The form is not filled completely.')
+       return(false)
+      }
+      
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+  </body>
+</html>
